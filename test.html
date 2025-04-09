@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مطعم المختار - قائمة الطعام</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1E3A8A; /* Deep blue */
+      --secondary-color: #3B82F6; /* Bright blue */
+      --accent-color: #EF4444; /* Red for prices */
+      --light-color: #F8FAFC; /* Very light blue */
+      --dark-color: #1E293B;
+      --text-color: #334155;
+      --text-light: #64748B;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary-color), #1D4ED8);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 3px solid white;
+      background-color: white;
+      padding: 5px;
+    }
+    
+    .header-text {
+      text-align: right;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+    }
+    
+    .tagline {
+      margin: 0.2rem 0 0;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+    
+    .persistent-nav {
+      position: sticky;
+      top: 95px; /* Below the header */
+      background: var(--primary-color);
+      z-index: 999;
+      padding: 0.5rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    #persistent-menu {
+      list-style: none;
+      display: flex;
+      overflow-x: auto;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0 1rem;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    #persistent-menu li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.15);
+      display: inline-block;
+    }
+    
+    #persistent-menu li a:hover,
+    #persistent-menu li a:focus {
+      background-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    #persistent-menu li a.active {
+      background-color: var(--accent-color);
+      font-weight: 700;
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 2rem 2rem 3rem;
+      text-align: center;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+      opacity: 0.9;
+    }
+    
+    section {
+      padding: 3rem 2rem;
+      scroll-margin-top: 150px; /* Account for sticky header + nav */
+    }
+    
+    .menu-category {
+      margin-bottom: 3rem;
+    }
+    
+    .category-title {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .menu-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .menu-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      border-right: 4px solid var(--secondary-color);
+    }
+    
+    .menu-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .item-name {
+      font-weight: 500;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .item-price {
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+    
+    .price-variation {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+    }
+    
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .copyright {
+      color: #94A3B8;
+      font-size: 0.9rem;
+    }
+    
+    /* Hide scrollbar but keep functionality */
+    #persistent-menu::-webkit-scrollbar {
+      display: none;
+    }
+    
+    @media (max-width: 992px) {
+      .hero h2 {
+        font-size: 2.2rem;
+      }
+      
+      .persistent-nav {
+        top: 85px;
+      }
+      
+      section {
+        scroll-margin-top: 140px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 0.8rem 1rem;
+      }
+      
+      .logo {
+        width: 60px;
+        height: 60px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .hero {
+        padding: 1.5rem 1rem 2.5rem;
+      }
+      
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      #persistent-menu li a {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+      }
+      
+      .persistent-nav {
+        top: 80px;
+      }
+      
+      section {
+        scroll-margin-top: 130px;
+        padding: 2rem 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      .tagline {
+        font-size: 0.8rem;
+      }
+      
+      .hero h2 {
+        font-size: 1.5rem;
+      }
+      
+      #persistent-menu li a {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.7rem;
+      }
+      
+      .persistent-nav {
+        top: 75px;
+      }
+      
+      section {
+        scroll-margin-top: 125px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="logo.jpeg" alt="شعار مطعم المختار" class="logo">
+      <div class="header-text">
+        <h1>مطعم المختار</h1>
+        <p class="tagline">أطباق بحرية ومشواي مميزة</p>
+      </div>
+    </div>
+  </header>
+
+ 
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2> مطعم المختار</h2>
+      <p>أجود المأكولات البحرية والمشاوي</p>
+    </div>
+  </section>
+  <nav class="persistent-nav">
+    <ul id="persistent-menu">
+      <li><a href="#cold-appetizers">مازة باردة</a></li>
+      <li><a href="#hot-appetizers">مازة ساخنة</a></li>
+      <li><a href="#seafood-sandwiches">ساندويش بحري</a></li>
+      <li><a href="#snacks">سناك</a></li>
+      <li><a href="#meals">وجبات</a></li>
+      <li><a href="#special">Special</a></li>
+      <li><a href="#grills">مشاوي</a></li>
+      <li><a href="#rice">صحون الرز</a></li>
+      <li><a href="#drinks">مرطبات</a></li>
+    </ul>
+  </nav>
+  <section id="cold-appetizers">
+    <div class="menu-category">
+      <h3 class="category-title">مازة باردة</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">تبولة</div>
+          <div class="item-price" >صغير    ٤$   </div>
+
+          <div class="item-price">كبير ٦  $  </div>
+          
+        </div>
+        <div class="menu-item">
+          <div class="item-name">فتوش</div>
+          <div class="item-price" >صغير    ٤$   </div>
+
+          <div class="item-price">كبير ٦  $  </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سلطة عربية</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">روكا زعتر</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">راهب سلاد</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سلطة يونانية</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سلطة سلاطعين</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس سلاد</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">حمص</div>
+          <div class="item-price">٣$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">حمص بشمندر</div>
+          <div class="item-price">٦$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">حمص بقريدس</div>
+          <div class="item-price">٦$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">متبل</div>
+          <div class="item-price">٣$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">متبل بشمندر</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">بابا غنوج</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">ورق عنب بزيت</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قرنبيط - باذنجان</div>
+          <div class="item-price">٤$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hot-appetizers">
+    <div class="menu-category">
+      <h3 class="category-title">مازة ساخنة</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">طاجن سمك</div>
+          <div class="item-price">٦$</div>
+        </div>
+        
+        <div class="menu-item">
+          <div class="item-name">سنبوسك سمك</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سنبوسك لحمة</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سمك بزري</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">فتة قريدس</div>
+          <div class="item-price">٧$</div>
+        </div>
+       
+        <div class="menu-item">
+          <div class="item-name">قريدس بروفينسال</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس بانيه</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس بالخضرة</div>
+          <div class="item-price">٨$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس بالعسل</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس ديناميت</div>
+          <div class="item-price">١٠$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">شوربة Sea Food</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">كلمار بروفينسال</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">كلمار بانيه</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">كلمار مشوي</div>
+          <div class="item-price">٧$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">صبيدج بالحبر</div>
+          <div class="item-price">١٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">أخطبوط بالكزبرة</div>
+          <div class="item-price">١٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">أخطبوط مشوي</div>
+          <div class="item-price">١٨$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سلمون مشوي</div>
+          <div class="item-price">١٠$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سلمون بالعسل</div>
+          <div class="item-price">١٠$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">بطاطا مقلية</div>
+          <div class="item-price">٣$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">بطاطا حرة</div>
+          <div class="item-price">٤$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">بطاطا combo</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">رقاقات قريدس (حبة)</div>
+          <div class="item-price">١$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">رقاقات جبنة</div>
+          <div class="item-price">٣$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سودة دجاج</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">نقانق</div>
+          <div class="item-price">٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">جوانح Barbecue</div>
+          <div class="item-price">٦$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="seafood-sandwiches">
+    <div class="menu-category">
+      <h3 class="category-title">ساندويش بحري</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">ثمار البحر</div>
+          <div class="item-price">
+            <span>عادي ٥٠٠</span>
+            <span class="price-variation">إكسترا ٦٥٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس كزبرة</div>
+          <div class="item-price">
+            <span>عادي ٥٠٠</span>
+            <span class="price-variation">إكسترا ٦٥٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">كلمار كزبرة</div>
+          <div class="item-price">
+            <span>عادي ٥٠٠</span>
+            <span class="price-variation">إكسترا ٦٥٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">ساندويش سمك اجاج</div>
+          <div class="item-price">٦٥٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">ساندويش سلاطعين</div>
+          <div class="item-price">٥٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">ساندويش أخطبوط</div>
+          <div class="item-price">٨٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">برغر سمك</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سمكة حرة</div>
+          <div class="item-price">٣٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">ساندويش بزرى</div>
+          <div class="item-price">٣٠٠</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="snacks">
+    <div class="menu-category">
+      <h3 class="category-title">سناك</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">شاورما غريل</div>
+          <div class="item-price">
+            <span>عادي ٤٠٠</span>
+            <span class="price-variation">إكسترا ٥٠٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">طاووق</div>
+          <div class="item-price">
+            <span>عادي ٤٠٠</span>
+            <span class="price-variation">إكسترا ٥٠٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">كريسبي</div>
+          <div class="item-price">
+            <span>عادي ٤٠٠</span>
+            <span class="price-variation">إكسترا ٥٠٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">Zinger</div>
+          <div class="item-price">
+            <span>عادي ٤٥٠</span>
+            <span class="price-variation">إكسترا ٥٥٠</span>
+          </div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">Fahita</div>
+          <div class="item-price">٥٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">بطاطا</div>
+          <div class="item-price">١٥٠</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meals">
+    <div class="menu-category">
+      <h3 class="category-title">وجبات</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">وجبة سمك Sea Bass</div>
+          <div class="item-price">٩٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة Zinger</div>
+          <div class="item-price">٩٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس بانيه</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة Fahita</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة مشكلة (Mix)</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة Cordon Blue</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة كريسبي دجاج</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">رويال تشيكن مع رز</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة طاووق</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">تشيكن الكريم مع موز</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">وجبة شاورما</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">تشيكن رابـس</div>
+          <div class="item-price">٦٠٠</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="special">
+    <div class="menu-category">
+      <h3 class="category-title">Special</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">سطل مشكل Sea Food</div>
+          <div class="item-price">٥٠$</div>
+        </div>
+       
+        <div class="menu-item">
+          <div class="item-name">صحن ثمار البحر بلدي اكسترا</div>
+          <div class="item-price">٢٥$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">صحن ثمار البحر بلدي </div>
+          <div class="item-price">١٥$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="grills">
+    <div class="menu-category">
+      <h3 class="category-title">مشواي</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">اجاج - براق (كيلو)</div>
+          <div class="item-price">١٣٠٠٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">قريدس مشوي جامبو (صحن)</div>
+          <div class="item-price">١٢$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">سمك بلدي</div>
+          <div class="item-price">سعر يومي </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rice">
+    <div class="menu-category">
+      <h3 class="category-title">صحون الرز</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">رز ع قريدس</div>
+          <div class="item-price">٨$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name"> صيادية سمك</div>
+          <div class="item-price">١٢$</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">رز ع دجاج</div>
+          <div class="item-price">٧$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <section id="drinks">
+    <div class="menu-category">
+      <h3 class="category-title">مرطبات</h3>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="item-name">مياه كبير</div>
+          <div class="item-price">١٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">مياه صغير</div>
+          <div class="item-price">٥٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">مشروب غازي كبير</div>
+          <div class="item-price">١٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">مشروب غازي صغير</div>
+          <div class="item-price">٥٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">Perrier</div>
+          <div class="item-price">١٠٠</div>
+        </div>
+        <div class="menu-item">
+          <div class="item-name">نرجيلة</div>
+          <div class="item-price">٤٥٠</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>مطعم المختار © 2025 جميع الحقوق محفوظة</p>
+    <p class="copyright">هاتف: 70 737872 | العنوان: العبدة، الطريق العام</p>
+  </footer>
+
+  <script>
+    // Highlight active menu item
+    const sections = document.querySelectorAll('section');
+    const menuItems = document.querySelectorAll('#persistent-menu a');
+    
+    window.addEventListener('scroll', () => {
+      let current = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (pageYOffset >= (sectionTop - 200)) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href').includes(current)) {
+          item.classList.add('active');
+        }
+      });
+    });
+    
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
