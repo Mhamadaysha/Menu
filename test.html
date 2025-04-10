@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu</title>
+  <title>مطعم المختار - Menu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -302,6 +302,42 @@
         scroll-margin-top: 125px;
       }
     }
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+      url('s4.jpg') no-repeat center center;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      position: relative;
+      height: 60vh; /* Adjust height as needed */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 2rem;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Make sure the image path is correct */
+    /* If the image is in a different folder, adjust the path like: */
+    /* url('images/s4.jpeq') */
   </style>
 </head>
 <body>
@@ -731,15 +767,18 @@
       <div class="menu-items">
         <div class="menu-item">
           <div class="item-name">رز ع قريدس</div>
-          <div class="item-price">٨$</div>
+          <div class="item-price">عادي٨$</div>
+          <div class="item-price">اكسترا٢٠$</div>
         </div>
         <div class="menu-item">
           <div class="item-name"> صيادية سمك</div>
-          <div class="item-price">١٢$</div>
+          <div class="item-price">عادي٨$</div>
+          <div class="item-price">اكسترا٢٠$</div>
         </div>
         <div class="menu-item">
           <div class="item-name">رز ع دجاج</div>
-          <div class="item-price">٧$</div>
+          <div class="item-price">عادي٧$</div>
+          <div class="item-price">اكسترا١٥$</div>
         </div>
       </div>
     </div>
